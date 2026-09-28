@@ -1,0 +1,21 @@
+# Editor and IDE configuration
+.vscode/
+.vs/
+.idea/
+*.swp
+*.swo
+# Operating-system files
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+# Private configuration and keys
+.env
+.env.*
+*.pem
+*.key
+# Local archives and scratch output
+*.zip
+*.log
+coverage/
+node_modules/
