@@ -1,0 +1,430 @@
+/* Learning and recovery share the existing Tempo colour and typography tokens. */
+[hidden] {
+  display: none !important;
+}
+.learning-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+.learning-filters > div {
+  min-width: 0;
+}
+.learning-filters .field-label {
+  color: var(--muted);
+  font-size: 12px;
+}
+.puzzle-collection {
+  margin-top: 32px;
+}
+.puzzle-collection h2,
+.opening-home h2 {
+  margin: 6px 0 10px;
+  letter-spacing: -0.7px;
+  font-size: 25px;
+}
+.puzzle-collection > p,
+.lesson-panel > p,
+.opening-home > p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.puzzle-library {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-height: 370px;
+  overflow: auto;
+  padding: 3px;
+}
+.puzzle-library-item {
+  padding: 16px;
+  text-align: left;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--subtle);
+}
+.puzzle-library-item strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+}
+.puzzle-library-item span {
+  display: block;
+  font-size: 10px;
+  margin-top: 7px;
+  color: var(--muted);
+}
+.puzzle-library-item[aria-current="true"] {
+  outline: 2px solid var(--muted);
+  outline-offset: -2px;
+}
+.lesson-explanation {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid var(--edge);
+  border-radius: 16px;
+  background: var(--subtle);
+}
+.lesson-explanation p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--ink);
+  margin-bottom: 0;
+}
+.opening-library {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+.opening-library h2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.opening-card {
+  width: 100%;
+  display: block;
+  padding: 17px 18px;
+  margin-bottom: 10px;
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  text-align: left;
+  background: var(--card);
+}
+.opening-card strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+}
+.opening-card span,
+.opening-card small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 6px;
+}
+.opening-card small {
+  margin-top: 12px;
+}
+.opening-card[aria-pressed="true"] {
+  border-color: var(--muted);
+  background: var(--subtle);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.study-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(270px, 1fr);
+  gap: 24px;
+  align-items: start;
+  scroll-margin-top: 24px;
+}
+.study-board-card {
+  padding: 20px 20px 20px 0;
+}
+.study-board-card > .board-frame {
+  margin: 0 0 0 12px;
+}
+.study-player-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 15px;
+  padding-left: 36px;
+  font-size: 13px;
+}
+.study-feedback {
+  min-height: 44px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin: 16px 0 0 36px;
+}
+.lesson-panel h2 {
+  margin: 8px 0;
+  font-size: 25px;
+  letter-spacing: -0.7px;
+}
+.lesson-panel .view-tabs {
+  display: flex;
+  margin: 22px 0 12px;
+}
+.lesson-panel .learning-filters {
+  grid-template-columns: 1fr;
+  margin: 16px 0;
+}
+.lesson-note {
+  border-left: 3px solid var(--accent);
+  padding: 8px 0 8px 15px;
+  min-height: 75px;
+}
+.study-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  max-height: 350px;
+  overflow-y: auto;
+  padding: 4px;
+  margin: 20px 0;
+}
+.study-move {
+  font-size: 12px;
+  padding: 9px 11px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--subtle);
+}
+.study-move[aria-current="true"] {
+  background: var(--lime);
+  color: #253a1d;
+  border-color: var(--lime);
+}
+.study-move:disabled {
+  opacity: 1;
+}
+.replay-controls,
+.lesson-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.replay-controls button {
+  padding: 11px 12px;
+  min-width: 40px;
+  flex: 1;
+}
+.lesson-actions button {
+  flex: 1;
+}
+.study-board-card > .replay-controls,
+.study-board-card > .home-note {
+  margin-left: 36px;
+}
+.study-board-card .board {
+  width: 100%;
+}
+.resume-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+  padding: 22px 26px;
+  background: var(--subtle);
+  border: 1px solid var(--edge);
+  border-radius: 18px;
+}
+.resume-card h2 {
+  font-size: 17px;
+  margin: 0 0 7px;
+}
+.resume-card p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+.resume-card a {
+  white-space: nowrap;
+}
+.opening-home {
+  margin-top: 22px;
+}
+.opening-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+.opening-preview-list a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 12px;
+  padding: 9px 13px;
+  border: 1px solid var(--edge);
+  border-radius: 30px;
+  background: var(--subtle);
+}
+.recent-list li {
+  align-items: center;
+  flex-wrap: wrap;
+}
+.recent-list a {
+  font-size: 11px;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.recent-list .old-result {
+  color: var(--muted);
+  font-size: 10px;
+}
+#game-save-status {
+  font-size: 11px;
+  text-align: left;
+  line-height: 1.7;
+  margin: 12px 3px;
+}
+@media (max-width: 1000px) {
+  .study-workspace {
+    grid-template-columns: minmax(0, 1.2fr) minmax(250px, 1fr);
+  }
+  .opening-library {
+    gap: 12px;
+  }
+  .opening-card {
+    padding: 14px;
+  }
+}
+@media (max-width: 740px) {
+  .study-workspace {
+    grid-template-columns: 1fr;
+  }
+  .opening-library {
+    grid-template-columns: 1fr;
+  }
+  .opening-library > section {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+  .opening-library h2 {
+    grid-column: 1/-1;
+  }
+  .opening-card strong {
+    font-size: 12px;
+  }
+  .opening-card span,
+  .opening-card small {
+    font-size: 10px;
+  }
+  .puzzle-library {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .resume-card {
+    align-items: start;
+    flex-direction: column;
+  }
+  .learning-filters {
+    grid-template-columns: 1fr;
+  }
+  .app-rail .rail-nav {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .opening-home {
+    padding: 22px;
+  }
+}
+@media (max-width: 420px) {
+  .opening-library > section {
+    grid-template-columns: 1fr;
+  }
+  .opening-library {
+    gap: 12px;
+  }
+  .opening-card {
+    margin-bottom: 0;
+  }
+  .opening-card small {
+    margin-top: 5px;
+  }
+  .puzzle-library {
+    grid-template-columns: 1fr;
+  }
+  .study-board-card {
+    padding-right: 14px;
+  }
+  .study-player-row {
+    padding-left: 30px;
+  }
+  .study-feedback {
+    margin-left: 30px;
+  }
+}
+.recent-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+/* Profile CRUD stays compact and uses the shared theme tokens. */
+.profile-manager {
+  margin-top: 24px;
+  border-top: 1px solid var(--edge);
+  padding-top: 18px;
+  font-size: 13px;
+}
+.profile-manager summary {
+  cursor: pointer;
+  color: var(--muted);
+  width: fit-content;
+  padding: 8px 0;
+}
+.profile-manager p,
+.profile-delete-dialog p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.profile-manager label {
+  display: block;
+  margin: 14px 0 8px;
+  font-size: 12px;
+}
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.profile-actions input {
+  flex: 1;
+  min-width: 180px;
+  max-width: 360px;
+  padding: 12px 15px;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+}
+.profile-actions .pill {
+  font-size: 12px;
+}
+.profile-delete-dialog {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 22px;
+  padding: 26px;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+}
+.profile-delete-dialog::backdrop {
+  background: #0008;
+}
+.profile-delete-dialog h2 {
+  font-size: 21px;
+}
+@media (max-width: 480px) {
+  .profile-actions {
+    align-items: stretch;
+  }
+  .profile-actions input {
+    max-width: none;
+    width: 100%;
+    flex-basis: 100%;
+  }
+  .profile-actions button {
+    flex: 1;
+  }
+  .profile-delete-dialog .dialog-actions {
+    flex-wrap: wrap;
+  }
+}
