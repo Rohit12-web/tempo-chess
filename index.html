@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#111714" />
+    <title>Tempo — Your little chess club</title>
+    <link rel="icon" href="assets/favicon.svg" />
+    <script src="js/helpers/theme.js"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/learning.css" />
+    <script src="js/helpers/profile.js" defer></script>
+    <script src="js/helpers/preview-board.js" defer></script>
+    <script src="js/core/engine.js" defer></script>
+    <script src="js/helpers/game-data.js" defer></script>
+    <script src="js/data/puzzle-data.js" defer></script>
+    <script src="js/data/opening-data.js" defer></script>
+    <script src="js/helpers/sound.js" defer></script>
+    <script src="js/helpers/select-menu.js" defer></script>
+    <script src="js/helpers/practice-data.js" defer></script>
+    <script src="js/home.js" defer></script>
+    <script src="js/profile-settings.js" defer></script>
+    <link rel="stylesheet" href="css/study-tools.css" />
+    <script src="js/helpers/preferences.js" defer></script>
+  </head>
+  <body class="checking-profile" data-profile-required="true">
+    <aside class="app-rail">
+      <a href="index.html" class="brand" aria-label="Tempo home"
+        ><span class="brand-mark" aria-hidden="true">♜</span>tempo<span
+          class="brand-period"
+          >.</span
+        ></a
+      >
+      <div>
+        <p class="rail-label">YOUR CHESS SPACE</p>
+        <nav class="rail-nav" aria-label="Main navigation">
+          <a href="index.html" data-nav="home"
+            ><span class="nav-symbol" aria-hidden="true">⌂</span>Home</a
+          ><a href="play.html?mode=local" data-nav="play"
+            ><span class="nav-symbol" aria-hidden="true">♙</span>Play</a
+          ><a href="play.html?view=puzzles" data-nav="puzzles"
+            ><span class="nav-symbol" aria-hidden="true">◇</span>Puzzles</a
+          ><a href="play.html?mode=bot"
+            ><span class="nav-symbol" aria-hidden="true">♞</span>Play a bot</a
+          ><a href="openings.html" data-nav="openings"
+            ><span class="nav-symbol" aria-hidden="true">♗</span>Openings</a
+          ><a href="notebook.html" data-nav="notebook"
+            ><span class="nav-symbol" aria-hidden="true">▤</span>Notebook</a
+          ><a href="lessons.html" data-nav="lessons"
+            ><span class="nav-symbol" aria-hidden="true">♙</span>Learn</a
+          ><a href="statistics.html" data-nav="statistics"
+            ><span class="nav-symbol" aria-hidden="true">▥</span>Progress</a
+          >
+        </nav>
+      </div>
+      <div class="rail-bottom">
+        <div class="rail-profile">
+          <span class="avatar" data-avatar>T</span>
+          <div>
+            <strong data-username>Player</strong
+            ><small>Your little chess club</small>
+          </div>
+        </div>
+        <button class="profile-switch" data-switch-profile>
+          Switch profile ↗
+        </button>
+      </div>
+    </aside>
+    <div class="app-content">
+      <header class="app-topbar">
+        <span>A little time for chess.</span>
+        <div class="topbar-right">
+          <span class="topbar-name" data-username>Player</span
+          ><button
+            class="profile-switch topbar-profile-switch"
+            style="display: none"
+            data-switch-profile
+          >
+            Switch profile</button
+          ><button
+            class="round-button"
+            data-theme-toggle
+            aria-label="Switch color theme"
+          >
+            ☾
+          </button>
+        </div>
+      </header>
+      <main class="dashboard">
+        <div class="dashboard-heading">
+          <div>
+            <div class="eyebrow">MAKE ROOM FOR A GOOD GAME</div>
+            <h1>Hello, <span data-username>Player</span><span>.</span></h1>
+            <p>Where will your next move take you?</p>
+          </div>
+          <span class="quiet-badge">✦ Your own little chess club</span>
+        </div>
+        <section class="resume-card" id="resume-card" hidden>
+          <div>
+            <div class="eyebrow">PICK UP WHERE YOU LEFT OFF</div>
+            <h2>Your board is waiting.</h2>
+            <p id="resume-detail"></p>
+          </div>
+          <a class="pill primary" href="play.html?resume=1">Continue game ↗</a>
+        </section>
+        <div class="home-grid">
+          <section class="feature-card play-card">
+            <div class="card-title-row">
+              <div>
+                <div class="eyebrow">SIXTY-FOUR POSSIBILITIES</div>
+                <h2>Let's play.</h2>
+              </div>
+              <span class="card-icon" aria-hidden="true">♚</span>
+            </div>
+            <p>A friend across the table. A little friendly competition.</p>
+            <div
+              class="home-board mini-board"
+              data-preview="start"
+              aria-hidden="true"
+            ></div>
+            <div class="time-picker" role="group" aria-label="Time per player">
+              <button data-time="60" aria-pressed="false">1 min</button
+              ><button data-time="180" aria-pressed="false">3 min</button
+              ><button data-time="300" aria-pressed="false">5 min</button
+              ><button data-time="600" aria-pressed="true">10 min</button
+              ><button data-time="1800" aria-pressed="false">30 min</button>
+            </div>
+            <a
+              class="wide-cta primary"
+              id="start-local"
+              href="play.html?mode=local&time=600"
+              >Play two-player <span aria-hidden="true">↗</span></a
+            >
+            <div class="play-choice-row">
+              <a id="start-bot" href="play.html?mode=bot&time=600"
+                >Play with Tempo ↗</a
+              >
+            </div>
+          </section>
+          <section class="feature-card puzzle-card">
+            <div class="card-title-row">
+              <div>
+                <div class="eyebrow">A MOMENT TO DISCOVER</div>
+                <h2>Find your next insight.</h2>
+              </div>
+              <span class="card-icon" aria-hidden="true">♞</span>
+            </div>
+            <p>
+              One position. A complete idea.<br />Give your chess instincts a
+              little exercise.
+            </p>
+            <div
+              class="home-board mini-board"
+              data-preview="puzzle"
+              aria-hidden="true"
+            ></div>
+            <div class="card-bottom">
+              <span>30 curated tactics</span
+              ><span id="puzzle-count">0 / 30 solved</span>
+            </div>
+            <div
+              class="progress-track"
+              role="progressbar"
+              aria-label="Puzzles solved"
+              aria-valuemin="0"
+              aria-valuemax="30"
+              aria-valuenow="0"
+            >
+              <span id="puzzle-progress-bar" style="width: 0%"></span>
+            </div>
+            <a class="wide-cta secondary" href="play.html?view=puzzles"
+              >Solve a puzzle <span aria-hidden="true">↗</span></a
+            >
+          </section>
+        </div>
+        <section class="feature-card opening-home">
+          <div class="eyebrow">BEGIN WITH AN IDEA</div>
+          <h2>Openings</h2>
+          <p>
+            Learn the first moves and the reason behind them. Then take a side
+            and practice the line.
+          </p>
+          <div class="opening-preview-list">
+            <a href="openings.html?opening=ruy-lopez">Ruy Lopez</a
+            ><a href="openings.html?opening=italian">Italian Game</a
+            ><a href="openings.html?opening=scotch">Scotch Game</a
+            ><a href="openings.html?opening=sicilian">Sicilian Defense</a
+            ><a href="openings.html?opening=french">French Defense</a
+            ><a href="openings.html?opening=caro-kann">Caro-Kann</a
+            ><a href="openings.html?opening=queens-gambit">Queen’s Gambit</a
+            ><a href="openings.html?opening=kings-indian">King’s Indian</a
+            ><a href="openings.html?opening=london">London System</a>
+          </div>
+          <div class="card-bottom">
+            <span id="home-opening-progress">0 / 9 practiced</span
+            ><a class="pill secondary" href="openings.html"
+              >Explore openings ↗</a
+            >
+          </div>
+        </section>
+        <section class="feature-card study-hub">
+          <div>
+            <div class="eyebrow">A LITTLE PRACTICE, YOUR WAY</div>
+            <h2>Keep learning.</h2>
+            <p id="home-review-count">
+              Your review queue is ready when you need it.
+            </p>
+          </div>
+          <div class="study-links">
+            <a class="pill secondary" href="lessons.html">Learn the basics</a
+            ><a
+              class="pill secondary"
+              href="play.html?view=puzzles&amp;review=1"
+              >Practice mistakes</a
+            ><a class="pill secondary" href="notebook.html">Your notebook</a
+            ><a class="pill secondary" href="statistics.html"
+              >Practice progress</a
+            >
+          </div>
+        </section>
+        <div class="lower-grid">
+          <section class="feature-card activity-card">
+            <div class="eyebrow">LITTLE STEPS ADD UP</div>
+            <h2>Your time at the board</h2>
+            <div class="stat-row">
+              <div>
+                <strong id="solved-stat">0</strong><span>Puzzles solved</span>
+              </div>
+              <div>
+                <strong id="games-stat">0</strong><span>Games completed</span>
+              </div>
+              <div>
+                <strong id="practice-stat">0</strong
+                ><span>Tactics practiced</span>
+              </div>
+            </div>
+          </section>
+          <section class="feature-card activity-card">
+            <div class="eyebrow">YOUR LAST MOVES</div>
+            <h2>Recently played</h2>
+            <label class="field-label" for="recent-search"
+              >Search game history</label
+            ><input
+              class="study-input"
+              type="search"
+              id="recent-search"
+              placeholder="Opening, result or date"
+            />
+            <div class="history-filters">
+              <div>
+                <label class="field-label" for="recent-mode">Opponent</label
+                ><select class="setup-select" id="recent-mode">
+                  <option value="all">All games</option>
+                  <option value="local">Same device</option>
+                  <option value="bot">Tempo bot</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="recent-result">Result</label
+                ><select class="setup-select" id="recent-result">
+                  <option value="all">All results</option>
+                  <option value="w">White won</option>
+                  <option value="b">Black won</option>
+                  <option value="draw">Draw</option>
+                </select>
+              </div>
+            </div>
+            <p id="recent-empty">
+              A fresh page. Finish a game and it will appear here.
+            </p>
+            <ul id="recent-list" class="recent-list"></ul>
+          </section>
+        </div>
+
+        <details class="profile-manager">
+          <summary>Manage profile</summary>
+          <p>
+            Change your display name. Your games and learning progress stay with
+            this profile.
+          </p>
+          <form id="rename-profile-form">
+            <label for="profile-name">Display name</label>
+            <div class="profile-actions">
+              <input
+                id="profile-name"
+                name="username"
+                required
+                minlength="2"
+                maxlength="24"
+                autocomplete="nickname"
+              /><button class="pill secondary" type="submit">Save name</button
+              ><button class="pill secondary" id="delete-profile" type="button">
+                Delete profile
+              </button>
+            </div>
+          </form>
+          <p id="profile-status" role="status" aria-live="polite"></p>
+        </details>
+        <dialog
+          id="delete-profile-dialog"
+          class="profile-delete-dialog"
+          aria-labelledby="delete-profile-title"
+        >
+          <h2 id="delete-profile-title">Delete this profile?</h2>
+          <p id="delete-profile-description"></p>
+          <p>
+            This removes its saved game, results, puzzle and opening progress
+            from this browser. This cannot be undone. Other profiles will stay.
+          </p>
+          <p id="delete-profile-error" role="alert"></p>
+          <div class="dialog-actions">
+            <button
+              class="dialog-secondary"
+              id="cancel-delete-profile"
+              autofocus
+            >
+              Keep profile</button
+            ><button class="dialog-primary" id="confirm-delete-profile">
+              Delete permanently
+            </button>
+          </div>
+        </dialog>
+        <p class="home-note" id="storage-note">
+          Progress is saved on this browser, for your profile. Clearing browser
+          data removes it; it does not sync between devices.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>
