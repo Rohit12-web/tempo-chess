@@ -195,3 +195,12 @@ The project source is distributed under the MIT license in `LICENSE`. Poppins us
 ## Personal notebook
 
 Save the visible position from Puzzles or Replay, add a title and note, and manage it on `notebook.html`. Notes can be searched, edited and deleted with confirmation. Each profile can keep up to 200 notes. New note starts from the initial board. Positions are stored as validated FEN snapshots; notes are personal observations, not engine analysis.
+
+## Troubleshooting
+
+- **No move sound:** Select a profile, open Board & sound, enable
+  sound and increase the volume. Check that your browser tab is not muted.
+- **Saved progress is missing:** Use the same browser and project
+  location. Private browsing or clearing browser data can remove progress.
+- **Styles or pieces are missing:** Keep the assets, css and js folders
+  beside the HTML files and extract the complete project before opening it.
