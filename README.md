@@ -1,6 +1,6 @@
 # TempoChess
 
-A frontend-only chess and learning application built with **HTML, CSS and vanilla JavaScript** for the Web Fundamentals project. Play a friend on the same device, practice against a bot, solve puzzles and learn openings. Local profiles keep progress in the browser.
+A frontend-only chess and learning application built with **HTML, CSS and vanilla JavaScript** for the Web Fundamentals project. Play a friend on the same device, practice against a bot, solve puzzles and learn openings. Versioned local accounts keep progress in the browser.
 
 **GitHub:** [Rohit12-web/tempo-chess](https://github.com/Rohit12-web/tempo-chess)
 
@@ -14,23 +14,23 @@ TempoChess gives beginners a quiet place to play and understand chess without an
 
 - **Technology:** semantic HTML, CSS and browser JavaScript. No external JavaScript libraries, framework, backend, npm dependencies or build step.
 
-- **Pages:** Landing, Home, Play/Puzzles, Openings, Replay, Notebook, Progress and Learn — eight HTML pages.
+- **Pages:** Landing, Login, Sign up, Home, Play/Puzzles, Openings, Replay, Notebook, Progress, Learn and the separate administrator Puzzle Manager.
 
 - **Play:** legal chess moves, local two-player mode, a JavaScript bot, timed games, undo, board flip and move history.
 
-- **Learning:** 30 puzzles (including six multi-move sequences), mistake review, practice statistics, nine annotated openings and five beginner rule lessons.
+- **Learning:** 30 built-in puzzles (including six multi-move sequences), mistake review, practice statistics, nine annotated openings and five beginner rule lessons.
 
-- **Persistence:** `localStorage` holds profile names, preferences, progress, results and one unfinished game per profile.
+- **Persistence:** `localStorage` holds versioned account records, salted PBKDF2 password hashes, preferences, progress, results, shared custom puzzles and one unfinished game per player. `sessionStorage` is intentionally not used for passwords; the current session stores only an account ID.
 
 - **CRUD:** create/read/update/delete local profiles and personal notebook entries.
 
-- **Presentation:** responsive CSS for mobile, tablet and desktop; bundled Poppins fonts and light/dark themes.
+- **Presentation:** responsive CSS for mobile, tablet and desktop, including narrow-phone navigation and game-board safeguards; every HTML entry point includes the bundled SVG favicon, Poppins fonts and light/dark themes.
 
 - **Audio:** the supplied `move-self.mp3` plays for piece movement when sound is enabled.
 
 ### Design and user flow
 
-1. Open `landing.html` and create or select a local profile.
+1. Open `landing.html` and choose **Get started** to sign up, or **Log in** for an existing account.
 
 2. Home (`index.html`) shows practice options, progress, recent results and any resumable match.
 
@@ -44,9 +44,9 @@ TempoChess gives beginners a quiet place to play and understand chess without an
 
 7. `lessons.html` teaches five beginner rules with interactive boards.
 
-8. Home → **Manage profile** exposes name editing and confirmed profile deletion.
+8. The player sidebar shows the display name, login username and a logout button. Account credentials are managed through the local login flow.
 
-Page scripts handle their own interfaces. Shared helpers handle profiles, menus, sound and study boards. The chess engine and bot are separated from UI code; learning positions live in data files. All data stays in this browser. Local profiles are not authenticated accounts.
+Page scripts handle their own interfaces. Shared helpers handle accounts, the compatibility profile API, menus, sound and study boards. The chess engine and bot are separated from UI code; learning positions live in data files. All data stays in this browser. Browser-side authentication is a local academic demonstration: anyone controlling the browser can inspect or bypass it, and it is not server-enforced public-site authorization.
 
 ## Prerequisites
 
@@ -54,7 +54,7 @@ Page scripts handle their own interfaces. Shared helpers handle profiles, menus,
 
 - The complete extracted project folder, including its `assets`, `css` and `js` subfolders.
 
-- No Node.js, package manager, server, API key, database or internet connection is required to run it.
+- No Node.js, package manager, API key, database or application backend is required. For reliable storage across pages, use static localhost hosting or HTTPS. The admin password lock requires Web Crypto.
 
 ## Run the application
 
@@ -64,7 +64,7 @@ Page scripts handle their own interfaces. Shared helpers handle profiles, menus,
 
 3. Double-click **`landing.html`** to open it in your browser.
 
-4. Choose **Get started**, create a display-name profile, or continue an existing one.
+4. Choose **Get started** and create a display name, unique username and password, or use **Log in**.
 
 5. Choose Play, Puzzles, Openings, Notebook, Progress or Learn from Home.
 
@@ -76,6 +76,7 @@ Keep all folders together. If updating an older copy, keep the old folder as a p
 
 ```text
 tempo-chess/
+├── admin.html
 ├── landing.html
 ├── index.html
 ├── play.html
@@ -86,10 +87,11 @@ tempo-chess/
 │   ├── styles.css
 │   ├── site.css
 │   ├── learning.css
-│   └── study-tools.css
+│   ├── study-tools.css
+│   └── admin.css
 ├── js/
-│   ├── app.js, home.js, landing.js
-│   ├── puzzles.js, openings.js, replay.js, profile-settings.js
+│   ├── admin.js, app.js, home.js, landing.js
+│   ├── puzzles.js, openings.js, replay.js, auth.js
 │   ├── notebook.js, statistics.js, lessons.js
 │   ├── core/       # engine.js, bot.js, bot-worker.js
 │   ├── data/       # puzzle-data.js, opening-data.js, lesson-data.js
@@ -100,6 +102,8 @@ tempo-chess/
 │   └── font licenses and ASSET-NOTES.md
 ├── .gitignore
 ├── LICENSE
+├── tests/admin.test.cjs
+├── ADMIN-GUIDE.md
 ├── README.md
 └── START-HERE.md
 ```
@@ -113,7 +117,7 @@ tempo-chess/
 | Update | Home → Manage profile → edit name → Save name | Same ID and progress; updated name |
 | Delete | Home → Manage profile → Delete profile → Delete permanently | Selected profile and its progress removed; other profiles retained |
 
-Names contain 2–24 letters, numbers, spaces, dots, dashes or underscores. Duplicate names are rejected without regard to case. Rename preserves saved games and practice history. Cancel or Escape dismisses the deletion dialog without removing anything. After deletion, the landing page offers the remaining profiles or a new one. Deletion cannot be undone.
+Player usernames contain 3–24 letters, numbers, underscores or hyphens and are unique without regard to case. `Rohit` and the legacy `admin` username are reserved. Passwords are 8–128 characters and are never stored as readable text. Display names can contain ordinary user text and are rendered with `textContent`.
 
 ## Features and behavior
 
@@ -129,7 +133,7 @@ Newly completed games have **Replay** links on Home, with step controls, move se
 
 ### Puzzles and practice review
 
-The collection contains 30 puzzles, including six multi-move sequences. Theme, difficulty, completion, multi-move and review filters narrow the collection. Make your move, wait for the automatic reply, then finish the line. Reset/skip cancels pending replies; a hidden page pauses the sequence. Mate exercises also accept an immediate legal checkmate. Other sequences demonstrate a selected reply, not an exhaustive engine analysis of all defenses.
+The built-in collection contains 30 puzzles, including six multi-move sequences. Theme, difficulty, completion, multi-move and review filters narrow the collection. Make your move, wait for the automatic reply, then finish the line. Reset/skip cancels pending replies; a hidden page pauses the sequence. Mate exercises also accept an immediate legal checkmate. Other sequences demonstrate a selected reply, not an exhaustive engine analysis of all defenses.
 
 Wrong answers, hints and solution reveals put a puzzle into **Practice mistakes**. A fresh completion with no wrong answer, hint or reveal clears it. Assisted completion remains practice rather than an unaided solved record. Revealing a line does not claim a successful solve. An empty review queue displays an empty state.
 
@@ -157,12 +161,13 @@ Home can search the latest 50 results and filter by game mode and result. Openin
 
 | Key | Purpose |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `tempo-local-profiles` | Profile IDs and display names |
-| `tempo-active-profile` | Selected profile ID |
+| `tempo-accounts-v1` | Versioned player/admin accounts and salted PBKDF2-SHA-256 password records |
+| `tempo-session-v1` | Current tab's account ID and session timestamp; never a password |
+| `tempo-local-profiles` | One-time legacy profile list used for migration only |
 | `tempo-local-progress:<id>` | Preferences, puzzle/opening/lesson progress, observed puzzle attempts, notebook entries, recent games and active match |
 | `tempo-theme` | Theme preference |
 
-There is no email/password login, OTP, backend, online multiplayer or cross-device synchronization. Anyone using this browser can select a local profile. Page redirection guides navigation; it is not a security boundary.
+There is no email recovery, OTP, backend, online multiplayer or cross-device synchronization. Password hashing uses Web Crypto PBKDF2-SHA-256 with a unique random salt per account. Anyone controlling this browser can inspect or bypass browser-side checks; this is not a security boundary or public-site authentication.
 
 Clearing browser data or deleting a profile removes progress. Private browsing may discard it. Full or blocked storage can prevent saves; errors are surfaced rather than reported as successful. There is no progress export/import or custom sound upload feature.
 
@@ -170,15 +175,15 @@ Clearing browser data or deleting a profile removes progress. Private browsing m
 
 Use the following checklist to evaluate the application. These are test steps, not a claim that browser testing has been completed. Record the browser, device or viewport, date, actual result and any issues in `TESTING.md` when you perform the checks.
 
-1. Create two profiles; rename one, reload and verify progress. Try duplicate/invalid names; cancel then confirm deletion of the spare profile.
+1. Sign up two player accounts; verify password mismatch, incorrect password, duplicate usernames with different capitalisation, reserved Rohit/admin names, logout, reload and back navigation.
 
-2. Save a puzzle and a replay position to Notebook. Search, edit and delete notes; switch profiles and verify isolation.
+2. Save a puzzle and a replay position to Notebook. Search, edit and delete notes; log in as the second account and verify isolation.
 
 3. Play local and bot games; refresh/resume and check clocks/undo. Finish and replay a game; search/filter recent results.
 
 4. Complete a multi-move puzzle, retry during its automatic reply and switch away/back. Make a mistake or request a hint; find it in review. Retry cleanly and verify it leaves review.
 
-5. Check Progress before/after an attempt and a reveal. Existing solved puzzles must not create historical accuracy.
+5. Log in as Rohit with the demo credentials, publish a custom puzzle, change the admin password, reload, and verify a player cannot open the dashboard. Existing custom puzzles must remain after player migration/deletion.
 
 6. Finish an opening, choose Play from here, test both keep/replace choices for an existing game, then reload/resume. Undo must stop at the opening setup.
 
@@ -198,9 +203,29 @@ Save the visible position from Puzzles or Replay, add a title and note, and mana
 
 ## Troubleshooting
 
-- **No move sound:** Select a profile, open Board & sound, enable
+- **No move sound:** Log in, open Board & sound, enable
   sound and increase the volume. Check that your browser tab is not muted.
 - **Saved progress is missing:** Use the same browser and project
   location. Private browsing or clearing browser data can remove progress.
 - **Styles or pieces are missing:** Keep the assets, css and js folders
   beside the HTML files and extract the complete project before opening it.
+
+## Local puzzle manager
+
+Use the normal `login.html` entry point. The administrator username is **Rohit**, with the initial demonstration password **rohit@128**. Change it from the separate `admin.html` dashboard. There is no public Puzzle Manager link and `admin` is no longer an alternative login.
+
+The manager supports custom puzzle CRUD, search, difficulty/visibility filters, legal-position and move-sequence checks, a step-through board preview, and draft/publish controls. Use **Load example** to start with a working position. Publish a puzzle to make it available under **Custom puzzles** in the player collection. The 30 built-in puzzles remain unchanged.
+
+Custom puzzles are stored separately from player profiles and shared across profiles on the same browser origin. Deleting a player profile does not delete the custom collection or the admin password. Editing a position or solution starts a new puzzle revision so old completion records are not counted against a different solution.
+
+This is a local management tool, not secure server-side administration. Its access lock can be bypassed by someone who controls the browser. Publishing does not upload data to GitHub or distribute puzzles to other devices. The app uses no external JavaScript libraries or backend.
+
+For reliable shared storage between pages, serve the folder from one static localhost address or HTTPS site. Directly opened file URLs have browser-dependent storage behavior. See [ADMIN-GUIDE.md](ADMIN-GUIDE.md) for setup, puzzle entry and local-only limitations. There is no server password recovery; changing or clearing browser data is not a routine recovery mechanism.
+
+### Optional development tests
+
+The app itself does not need Node.js. To run the included dependency-free helper tests with Node.js 20 or later:
+
+```sh
+node --test tests/*.test.cjs
+```
