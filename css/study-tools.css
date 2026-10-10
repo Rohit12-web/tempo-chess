@@ -216,9 +216,57 @@
   color: var(--ink);
   text-decoration: none;
 }
-.app-rail .rail-nav {
-  overflow-y: auto;
-  max-height: calc(100vh - 290px);
+/* Desktop sidebar: flexible navigation and lower profile section */
+@media (min-width: 901px) {
+  .app-rail {
+    padding-bottom: 12px;
+  }
+
+  .app-rail > .brand {
+    flex-shrink: 0;
+  }
+
+  .app-rail > div:not(.rail-bottom) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .app-rail .rail-label {
+    flex-shrink: 0;
+  }
+
+  .app-rail .rail-nav {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+    scrollbar-width: none;
+    align-content: start;
+    gap: 4px;
+  }
+
+  .app-rail .rail-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-rail .rail-nav a {
+    padding: 10px 14px;
+  }
+
+  .app-rail .rail-bottom {
+    flex-shrink: 0;
+    margin-top: 12px;
+  }
+
+  .app-rail .rail-profile {
+    padding-top: 14px;
+  }
+
+  .app-rail .profile-switch {
+    padding: 12px 0 4px;
+  }
 }
 #puzzle-study-board {
   width: 100%;
