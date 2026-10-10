@@ -1198,9 +1198,8 @@
   document.addEventListener(
     "click",
     (event) => {
-      const link = event.target.closest("a[href]"),
-        switcher = event.target.closest("[data-switch-profile]");
-      if (!link && !switcher) return;
+      const link = event.target.closest("a[href]");
+      if (!link) return;
       if (
         link &&
         (link.dataset.nav === "play" ||
@@ -1213,7 +1212,7 @@
       if (!game.history.length || status.over) return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      const destination = switcher ? "landing.html?profiles=1" : link.href;
+      const destination = link.href;
       openDialog(
         '<div class="dialog-eyebrow">A LITTLE PAUSE</div><h2 id="dialog-title">Leave the board?</h2><p id="leave-detail">Your current game will be saved here, with the clocks paused.</p><div class="dialog-actions"><button class="dialog-secondary" id="leave-stay">Keep playing</button><button class="dialog-primary" id="leave-confirm">Save & leave</button></div>',
       );

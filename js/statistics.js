@@ -4,6 +4,7 @@
   const $ = (id) => document.getElementById(id);
   document.querySelector('[data-nav="statistics"]')?.classList.add("active");
   function render() {
+    globalThis.TempoCustomPuzzles?.refresh();
     const s = TempoPractice.summary(),
       percent = (a, b) => (b ? Math.round((a / b) * 100) + "%" : "—");
     $("practice-metrics").replaceChildren();

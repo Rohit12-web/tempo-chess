@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/site.css" />
     <link rel="stylesheet" href="css/learning.css" />
+    <script src="js/helpers/auth.js" defer></script>
     <script src="js/helpers/profile.js" defer></script>
     <script src="js/core/engine.js" defer></script>
     <script src="js/data/opening-data.js" defer></script>
@@ -24,6 +25,7 @@
     <script src="js/helpers/select-menu.js" defer></script>
     <script src="js/app.js" defer></script>
     <script src="js/data/puzzle-data.js" defer></script>
+    <script src="js/helpers/custom-puzzles.js" defer></script>
     <script src="js/helpers/notebook-data.js" defer></script>
     <script src="js/helpers/notebook-dialog.js" defer></script>
     <script src="js/helpers/study-board.js" defer></script>
@@ -66,12 +68,12 @@
         <div class="rail-profile">
           <span class="avatar" data-avatar>T</span>
           <div>
-            <strong data-username>Player</strong
-            ><small>Your little chess club</small>
+            <strong data-display-name>Player</strong
+            ><small data-account-username>@player</small>
           </div>
         </div>
-        <button class="profile-switch" data-switch-profile>
-          Switch profile ↗
+        <button class="profile-switch" data-logout>
+          Log out
         </button>
       </div>
     </aside>
@@ -505,12 +507,14 @@
                     <option value="">All levels</option>
                     <option>Beginner</option>
                     <option>Intermediate</option>
+                    <option>Advanced</option>
                   </select>
                 </div>
                 <div>
                   <label class="field-label" for="puzzle-filter">Progress</label
                   ><select class="setup-select" id="puzzle-filter">
                     <option value="all">All puzzles</option>
+                    <option value="custom">Custom puzzles</option>
                     <option value="new">New</option>
                     <option value="review">Practice mistakes</option>
                     <option value="multi">Multi-move</option>

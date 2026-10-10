@@ -13,7 +13,7 @@
       name="description"
       content="A little time for chess. Play a friend, meet your next opponent, or find your next brilliant move."
     />
-    <script src="js/helpers/profile.js" defer></script>
+    <script src="js/helpers/auth.js" defer></script>
     <script src="js/helpers/preview-board.js" defer></script>
     <script src="js/helpers/select-menu.js" defer></script>
     <script src="js/landing.js" defer></script>
@@ -32,10 +32,10 @@
           ><a class="text-link" href="#how-it-works">Made for a moment</a>
         </nav>
         <div>
-          <button class="text-link" data-profile-open>Your profile</button
-          ><button class="pill secondary" data-profile-open>
+          <a class="text-link" data-login-link href="login.html">Log in</a
+          ><a class="pill secondary" data-auth-link href="signup.html">
             Get started <span aria-hidden="true">↗</span>
-          </button>
+          </a>
         </div>
       </header>
       <main>
@@ -50,8 +50,8 @@
               puzzle, a moment just for you.
             </p>
             <div class="hero-actions">
-              <button class="pill primary" data-profile-open>
-                Find your tempo <span aria-hidden="true">↗</span></button
+              <a class="pill primary" data-auth-link href="signup.html">
+                Find your tempo <span aria-hidden="true">↗</span></a
               ><a class="pill" href="#your-game">Explore the board</a>
             </div>
             <p class="hero-note">
@@ -112,50 +112,8 @@
       </main>
       <footer class="landing-footer">
         <span>© Tempo · A little time for chess.</span
-        ><span>Made for the love of the game.</span>
+        >        <span>Made for the love of the game. Local accounts keep progress in this browser.</span>
       </footer>
     </div>
-    <dialog
-      id="profile-dialog"
-      class="profile-dialog"
-      aria-labelledby="profile-title"
-    >
-      <button class="close-profile" aria-label="Close profile chooser">
-        ×
-      </button>
-      <div class="eyebrow">YOUR OWN CHESS SPACE</div>
-      <h2 id="profile-title">Make yourself at home.</h2>
-      <p>
-        Choose a name and make your next move. Your progress stays on this
-        browser.
-      </p>
-      <section id="saved-profiles" hidden>
-        <label for="profile-select">Continue a local profile</label
-        ><select id="profile-select"></select
-        ><button class="pill secondary" id="continue-profile">
-          Continue profile ↗
-        </button>
-        <div class="profile-divider">or create a new profile</div>
-      </section>
-      <form id="profile-form">
-        <label for="username">What should we call you?</label
-        ><input
-          id="username"
-          name="username"
-          autocomplete="nickname"
-          placeholder="Your name"
-          minlength="2"
-          maxlength="24"
-          required
-        /><button class="pill primary" type="submit">
-          Create profile & play ↗
-        </button>
-      </form>
-      <p class="profile-error" id="profile-error" role="alert"></p>
-      <p class="profile-status">
-        Local profiles are available to anyone using this browser. No email or
-        password needed.
-      </p>
-    </dialog>
   </body>
 </html>

@@ -38,7 +38,7 @@
     helped = solved = revealed = false;
     $("puzzle-promotion").value = "q";
     TempoSelect.enhance($("puzzle-promotion-field"));
-    $("puzzle-save-warning").textContent = "";
+    $("puzzle-save-warning").textContent = globalThis.TempoCustomPuzzles?.error() || "";
     $("puzzle-feedback").textContent = "";
     TempoProfile.rememberPuzzle(puzzle().id);
     render();
@@ -200,6 +200,7 @@
           (!theme || p.category === theme) &&
           (!difficulty || p.difficulty === difficulty) &&
           (filter === "all" ||
+            (filter === "custom" && p.custom) ||
             (filter === "new" && !completed(p.id)) ||
             (filter === "review" && stats[p.id]?.needsReview) ||
             (filter === "multi" && p.line) ||
@@ -223,7 +224,7 @@
       const title = document.createElement("strong"),
         label = document.createElement("span");
       title.textContent = `${i + 1}. ${p.theme}`;
-      label.textContent = `${p.line ? "Multi-move · " : ""}${p.difficulty} · ${TempoPractice.all()[p.id]?.needsReview ? "Review" : (progress.solved || []).includes(p.id) ? "Solved" : completed(p.id) ? "Practiced" : "New"}`;
+      label.textContent = `${p.custom ? "Custom · " : ""}${p.line ? "Multi-move · " : ""}${p.difficulty} · ${TempoPractice.all()[p.id]?.needsReview ? "Review" : (progress.solved || []).includes(p.id) ? "Solved" : completed(p.id) ? "Practiced" : "New"}`;
       b.append(title, label);
       b.addEventListener("click", () => load(i));
       $("puzzle-library").append(b);
@@ -318,9 +319,25 @@
         view(name);
       });
   }
+  function refreshCustomCollection() {
+    if (!globalThis.TempoCustomPuzzles) return;
+    const id = game ? puzzle()?.id : null;
+    const before = JSON.stringify(P);
+    TempoCustomPuzzles.refresh();
+    if (!game || before === JSON.stringify(P)) return;
+    cancel();
+    const indices = pool();
+    const same = P.findIndex(p => p.id === id);
+    load(same >= 0 && indices.includes(same) ? same : (indices[0] ?? 0));
+    $("puzzle-feedback").textContent = "The puzzle collection was updated. Start a fresh attempt.";
+  }
+  window.addEventListener("storage", event => {
+    if (event.key === "tempo-custom-puzzles-v1" || event.key === null) refreshCustomCollection();
+  });
   document.addEventListener("visibilitychange", () => {
     cancel();
     if (!document.hidden && visible) {
+      refreshCustomCollection();
       render();
       reply();
     }

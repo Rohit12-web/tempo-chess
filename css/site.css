@@ -364,70 +364,6 @@ select {
   font-size: 12px;
   color: #84978a;
 }
-.profile-dialog {
-  width: 440px;
-  max-width: calc(100vw - 32px);
-  border: 1px solid #42563d;
-  padding: 34px;
-  border-radius: 24px;
-  background: #18231c;
-  color: #edf3e9;
-  box-shadow: 0 30px 120px #0008;
-}
-.profile-dialog::backdrop {
-  background: #050b08b8;
-  backdrop-filter: blur(8px);
-}
-.profile-dialog .close-profile {
-  float: right;
-  font-size: 24px;
-  line-height: 1;
-}
-.profile-dialog h2 {
-  font-size: 30px;
-  letter-spacing: -1px;
-  margin: 22px 0 10px;
-}
-.profile-dialog p {
-  color: #aebdad;
-  line-height: 1.7;
-  font-size: 14px;
-}
-.profile-dialog label {
-  display: block;
-  font-size: 13px;
-  margin: 20px 0 8px;
-  color: #d5e2d0;
-}
-.profile-dialog input {
-  width: 100%;
-  border: 1px solid #465b43;
-  background: #111b15;
-  color: #edf3e9;
-  border-radius: 10px;
-  padding: 14px;
-  outline-offset: 3px;
-}
-.profile-dialog input:focus {
-  outline: 2px solid #bde58b;
-}
-.profile-dialog .primary {
-  width: 100%;
-  margin-top: 24px;
-}
-.profile-dialog .profile-error {
-  color: #ffb7a2;
-  min-height: 22px;
-}
-.profile-dialog .text-link {
-  display: block;
-  margin-top: 16px;
-  padding: 4px;
-}
-.profile-dialog .profile-status {
-  font-size: 12px;
-  margin-bottom: 0;
-}
 .landing @keyframes board-enter {
   from {
     opacity: 0;
@@ -538,6 +474,224 @@ select {
   font-size: 12px;
   color: var(--muted);
   padding: 15px 0;
+}
+
+/* Final responsive guardrails shared by the dashboard, study pages and game UI. */
+html {
+  overflow-x: hidden;
+}
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
+}
+.page-wrap,
+.site-shell,
+.app-content,
+.dashboard,
+.landing-main,
+.landing-strip,
+.admin-wrap {
+  min-width: 0;
+}
+.dashboard *,
+.game-page *,
+.admin-page * {
+  min-width: 0;
+}
+.landing-footer,
+.admin-footer {
+  flex-wrap: wrap;
+}
+.landing-footer > span,
+.admin-footer > * {
+  overflow-wrap: anywhere;
+}
+.site-footer {
+  flex-wrap: wrap;
+}
+.site-footer > * {
+  min-width: 0;
+}
+.history-header,
+.status-section,
+.player-row,
+.board-caption,
+.resume-card {
+  min-width: 0;
+}
+.player-name,
+.player-description,
+.status-line h2,
+.status-line p {
+  overflow-wrap: anywhere;
+}
+.game-page .site-header {
+  flex-wrap: wrap;
+}
+.game-page .header-actions,
+.game-page .view-tabs {
+  min-width: 0;
+  max-width: 100%;
+}
+.game-page .view-tabs {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.game-page .view-tabs::-webkit-scrollbar {
+  display: none;
+}
+.table-scroll {
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 600px) {
+  .page-wrap,
+  .site-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .landing-header {
+    gap: 12px;
+  }
+  .landing-header > div {
+    min-width: 0;
+  }
+  .landing-header .brand {
+    font-size: 24px;
+  }
+  .landing-header .brand-mark {
+    width: 34px;
+    height: 34px;
+    font-size: 23px;
+  }
+  .hero-actions,
+  .hero-actions .pill {
+    width: 100%;
+  }
+  .hero-actions .pill {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .landing-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .landing-footer > span {
+    max-width: none;
+  }
+  .app-rail {
+    gap: 10px;
+    overflow: hidden;
+  }
+  .app-rail .brand {
+    flex-shrink: 0;
+  }
+  .rail-nav {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .rail-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .rail-nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .app-topbar {
+    min-width: 0;
+  }
+  .app-topbar > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .topbar-right {
+    flex-shrink: 0;
+  }
+  .game-page .site-header {
+    height: auto;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .game-page .header-actions {
+    margin-left: auto;
+  }
+  .game-page .game-layout {
+    gap: 16px;
+  }
+  .game-page .board-column {
+    padding: 10px 8px 14px 0;
+  }
+  .game-page .board-frame {
+    padding-left: 20px;
+    padding-bottom: 20px;
+    margin-left: 4px;
+  }
+  .game-page .player-row,
+  .game-page .player-row:last-of-type {
+    padding-left: 24px;
+  }
+  .game-page .board-caption {
+    margin-left: 24px;
+    flex-wrap: wrap;
+  }
+  .game-page .caption-right {
+    margin-left: auto;
+  }
+  .game-page .player-captures {
+    max-width: 70px;
+    overflow: hidden;
+  }
+  .game-page .player-clock {
+    min-width: 68px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .feature-card,
+  .resume-card,
+  .opening-home {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .app-rail {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .app-rail .brand {
+    font-size: 20px;
+  }
+  .app-rail .brand-mark {
+    width: 28px;
+    height: 28px;
+    font-size: 19px;
+  }
+  .rail-nav a {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+  .app-content {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .game-page .player-row,
+  .game-page .player-row:last-of-type {
+    padding-left: 18px;
+  }
+  .game-page .player-name {
+    font-size: 11px;
+  }
+  .game-page .player-clock {
+    font-size: 18px;
+    min-width: 60px;
+  }
 }
 .app-content {
   margin-left: 212px;
@@ -1190,28 +1344,6 @@ h1,
 .mode-tabs {
   grid-template-columns: repeat(2, 1fr);
 }
-.profile-dialog select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--edge);
-  border-radius: 10px;
-  background: var(--subtle);
-  color: var(--ink);
-  font: inherit;
-}
-.profile-dialog .secondary {
-  width: 100%;
-  margin-top: 14px;
-}
-.profile-divider {
-  text-align: center;
-  font-size: 12px;
-  color: #aebdad;
-  margin: 24px 0 8px;
-}
-.profile-dialog label {
-  line-height: 1.7;
-}
 .profile-switch {
   font-size: 12px;
   color: var(--muted);
@@ -1393,9 +1525,6 @@ h1,
     gap: 14px;
   }
   .game-dialog:has(.setup-fields) {
-    padding: 28px 22px;
-  }
-  .profile-dialog {
     padding: 28px 22px;
   }
   .select-trigger,

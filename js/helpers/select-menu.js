@@ -6,7 +6,7 @@
 
   function enhance(root = document) {
     root
-      .querySelectorAll("select.setup-select, #profile-select")
+      .querySelectorAll("select.setup-select")
       .forEach((select) => {
         if (controls.has(select)) {
           controls.get(select).sync();

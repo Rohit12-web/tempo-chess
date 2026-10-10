@@ -3,6 +3,7 @@
   document.querySelector('[data-nav="home"]').classList.add("active");
   const $ = (id) => document.getElementById(id);
   function render() {
+    globalThis.TempoCustomPuzzles?.refresh();
     const p = TempoProfile.progress(),
       solved = TempoPuzzles.filter((x) =>
         (p.solved || []).includes(x.id),
@@ -13,6 +14,7 @@
     $("solved-stat").textContent = solved;
     $("games-stat").textContent = p.completedCount ?? games.length;
     $("practice-stat").textContent = (p.practiced || []).length;
+    $("puzzle-progress-bar").parentElement.setAttribute("aria-valuemax", total);
     $("puzzle-progress-bar").style.width = (solved / total) * 100 + "%";
     $("puzzle-progress-bar").parentElement.setAttribute(
       "aria-valuenow",

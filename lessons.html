@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/site.css" />
     <link rel="stylesheet" href="css/learning.css" />
+    <script src="js/helpers/auth.js" defer></script>
     <script src="js/helpers/profile.js" defer></script>
     <script src="js/core/engine.js" defer></script>
     <script src="js/helpers/game-data.js" defer></script>
@@ -56,12 +57,12 @@
         <div class="rail-profile">
           <span class="avatar" data-avatar>T</span>
           <div>
-            <strong data-username>Player</strong
-            ><small>Your little chess club</small>
+            <strong data-display-name>Player</strong
+            ><small data-account-username>@player</small>
           </div>
         </div>
-        <button class="profile-switch" data-switch-profile>
-          Switch profile ↗
+        <button class="profile-switch" data-logout>
+          Log out
         </button>
       </div>
     </aside>

@@ -10,17 +10,18 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/site.css" />
     <link rel="stylesheet" href="css/learning.css" />
+    <script src="js/helpers/auth.js" defer></script>
     <script src="js/helpers/profile.js" defer></script>
     <script src="js/helpers/preview-board.js" defer></script>
     <script src="js/core/engine.js" defer></script>
     <script src="js/helpers/game-data.js" defer></script>
     <script src="js/data/puzzle-data.js" defer></script>
+    <script src="js/helpers/custom-puzzles.js" defer></script>
     <script src="js/data/opening-data.js" defer></script>
     <script src="js/helpers/sound.js" defer></script>
     <script src="js/helpers/select-menu.js" defer></script>
     <script src="js/helpers/practice-data.js" defer></script>
     <script src="js/home.js" defer></script>
-    <script src="js/profile-settings.js" defer></script>
     <link rel="stylesheet" href="css/study-tools.css" />
     <script src="js/helpers/preferences.js" defer></script>
   </head>
@@ -58,12 +59,12 @@
         <div class="rail-profile">
           <span class="avatar" data-avatar>T</span>
           <div>
-            <strong data-username>Player</strong
-            ><small>Your little chess club</small>
+            <strong data-display-name>Player</strong
+            ><small data-account-username>@player</small>
           </div>
         </div>
-        <button class="profile-switch" data-switch-profile>
-          Switch profile ↗
+        <button class="profile-switch" data-logout>
+          Log out
         </button>
       </div>
     </aside>
@@ -71,13 +72,7 @@
       <header class="app-topbar">
         <span>A little time for chess.</span>
         <div class="topbar-right">
-          <span class="topbar-name" data-username>Player</span
-          ><button
-            class="profile-switch topbar-profile-switch"
-            style="display: none"
-            data-switch-profile
-          >
-            Switch profile</button
+          <span class="topbar-name" data-display-name>Player</span
           ><button
             class="round-button"
             data-theme-toggle
@@ -273,55 +268,6 @@
           </section>
         </div>
 
-        <details class="profile-manager">
-          <summary>Manage profile</summary>
-          <p>
-            Change your display name. Your games and learning progress stay with
-            this profile.
-          </p>
-          <form id="rename-profile-form">
-            <label for="profile-name">Display name</label>
-            <div class="profile-actions">
-              <input
-                id="profile-name"
-                name="username"
-                required
-                minlength="2"
-                maxlength="24"
-                autocomplete="nickname"
-              /><button class="pill secondary" type="submit">Save name</button
-              ><button class="pill secondary" id="delete-profile" type="button">
-                Delete profile
-              </button>
-            </div>
-          </form>
-          <p id="profile-status" role="status" aria-live="polite"></p>
-        </details>
-        <dialog
-          id="delete-profile-dialog"
-          class="profile-delete-dialog"
-          aria-labelledby="delete-profile-title"
-        >
-          <h2 id="delete-profile-title">Delete this profile?</h2>
-          <p id="delete-profile-description"></p>
-          <p>
-          Deleting this profile permanently removes its saved game, game history,
-          puzzle and opening progress, notebook entries, lesson progress and
-          preferences from this browser. This cannot be undone.
-          </p>
-          <p id="delete-profile-error" role="alert"></p>
-          <div class="dialog-actions">
-            <button
-              class="dialog-secondary"
-              id="cancel-delete-profile"
-              autofocus
-            >
-              Keep profile</button
-            ><button class="dialog-primary" id="confirm-delete-profile">
-              Delete permanently
-            </button>
-          </div>
-        </dialog>
         <p class="home-note" id="storage-note">
           Progress is saved on this browser, for your profile. Clearing browser
           data removes it; it does not sync between devices.

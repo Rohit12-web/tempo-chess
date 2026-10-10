@@ -1,12 +1,12 @@
-/* Local profiles and progress. Runs entirely in the browser. */
+/* Compatibility API for the chess features, backed by TempoAuth accounts. */
 (() => {
   "use strict";
-  const PROFILES = "tempo-local-profiles",
-    ACTIVE = "tempo-active-profile";
-  let storageAvailable = true,
-    memory = {},
-    memoryDirty = false,
-    user = null;
+  const PROFILES = "tempo-local-profiles";
+  let user = null;
+  let memory = {};
+  let memoryDirty = false;
+  let storageAvailable = true;
+
   function read(key) {
     try {
       return JSON.parse(localStorage.getItem(key));
@@ -24,157 +24,52 @@
       return false;
     }
   }
-  function profiles() {
-    const saved = read(PROFILES);
-    return Array.isArray(saved)
-      ? saved.filter(
-          (p) =>
-            p && typeof p.id === "string" && typeof p.username === "string",
-        )
-      : [];
+  function profileList() {
+    const accounts = TempoAuth.accountList().filter((account) => account.role === "player");
+    return accounts.map((account) => ({
+      id: account.id,
+      username: account.displayName,
+      displayName: account.displayName,
+      loginUsername: account.username,
+    }));
   }
   function progress() {
     if (memoryDirty) return memory;
     const saved = user && read("tempo-local-progress:" + user.id);
-    return saved && typeof saved === "object" && !Array.isArray(saved)
-      ? saved
-      : memory;
+    return saved && typeof saved === "object" && !Array.isArray(saved) ? saved : memory;
   }
   function update(fn) {
-    if (!user) return;
+    if (!user) return false;
     memory = fn(progress());
     const saved = write("tempo-local-progress:" + user.id, memory);
     memoryDirty = !saved;
     window.dispatchEvent(new Event("tempo-progress-change"));
     return saved;
   }
-  function activate(id) {
-    const found = profiles().find((p) => p.id === id);
-    if (!found) throw Error("Choose an existing profile or create a new one.");
-    if (!write(ACTIVE, id))
-      throw Error(
-        "Browser storage is unavailable. Allow local storage to save and use your profile.",
-      );
-    user = found;
-    memory = {};
-    memoryDirty = false;
-    return user;
-  }
-  function newId() {
-    return (
-      globalThis.crypto?.randomUUID?.() ||
-      Date.now().toString(36) + "-" + Math.random().toString(36).slice(2)
-    );
-  }
-  function create(name) {
-    const username = String(name).trim().replace(/\s+/g, " ");
-    if (!/^[\p{L}\p{N} _.-]{2,24}$/u.test(username))
-      throw Error(
-        "Use 2–24 letters, numbers, spaces, dots, dashes or underscores.",
-      );
-    const saved = profiles();
-    if (
-      saved.some(
-        (p) => p.username.toLocaleLowerCase() === username.toLocaleLowerCase(),
-      )
-    )
-      throw Error(
-        "That name already has a local profile. Choose it above to continue.",
-      );
-    const id = newId();
-    if (!write(PROFILES, [...saved, { id, username }]))
-      throw Error(
-        "Browser storage is unavailable. Allow local storage to save your profile.",
-      );
-    return activate(id);
-  }
-  function rename(name) {
-    if (!user) throw Error("Choose a profile first.");
-    const username = String(name).trim().replace(/\s+/g, " "),
-      saved = profiles();
-    if (!/^[\p{L}\p{N} _.-]{2,24}$/u.test(username))
-      throw Error(
-        "Use 2–24 letters, numbers, spaces, dots, dashes or underscores.",
-      );
-    if (
-      saved.some(
-        (p) =>
-          p.id !== user.id &&
-          p.username.toLocaleLowerCase() === username.toLocaleLowerCase(),
-      )
-    )
-      throw Error("That name already belongs to another profile.");
-    if (!saved.some((p) => p.id === user.id))
-      throw Error("This profile no longer exists. Choose a profile again.");
-    const next = { ...user, username };
-    if (
-      !write(
-        PROFILES,
-        saved.map((p) => (p.id === user.id ? next : p)),
-      )
-    )
-      throw Error("Could not save the name. Check browser storage.");
-    user = next;
-    window.dispatchEvent(new Event("tempo-profile-change"));
-    return user;
-  }
-  function remove() {
-    if (!user) throw Error("Choose a profile first.");
-    const key = "tempo-local-progress:" + user.id,
-      keys = [PROFILES, ACTIVE, key];
-    const originals = new Map();
-    try {
-      for (const k of keys) originals.set(k, localStorage.getItem(k));
-      localStorage.setItem(
-        PROFILES,
-        JSON.stringify(profiles().filter((p) => p.id !== user.id)),
-      );
-      localStorage.removeItem(key);
-      localStorage.removeItem(ACTIVE);
-    } catch {
-      storageAvailable = false;
-      for (const [k, value] of originals) {
-        try {
-          if (value === null) localStorage.removeItem(k);
-          else localStorage.setItem(k, value);
-        } catch {}
-      }
-      throw Error(
-        "Could not delete the profile. Check browser storage and try again.",
-      );
-    }
-    user = null;
-    memory = {};
-    memoryDirty = false;
-    window.dispatchEvent(new Event("tempo-profile-change"));
-  }
-  const active = read(ACTIVE);
-  user = profiles().find((p) => p.id === active) || null;
-  const ready = Promise.resolve(user);
   function boot() {
-    if (!user && document.body.dataset.profileRequired === "true") {
-      location.replace("landing.html");
-      return;
-    }
-    document
-      .querySelectorAll("[data-username]")
-      .forEach((el) => (el.textContent = user?.username || "Player"));
-    document
-      .querySelectorAll("[data-avatar]")
-      .forEach(
-        (el) =>
-          (el.textContent = (user?.username || "P").slice(0, 1).toUpperCase()),
-      );
-    document.body.classList.remove("checking-profile");
-    document.querySelectorAll("[data-switch-profile]").forEach((el) =>
+    user = TempoAuth.requirePlayer();
+    if (!user) return;
+    memory = {};
+    memoryDirty = false;
+    document.querySelectorAll("[data-display-name], [data-username]").forEach((el) => {
+      el.textContent = user.displayName;
+    });
+    document.querySelectorAll("[data-account-username]").forEach((el) => {
+      el.textContent = "@" + user.username;
+    });
+    document.querySelectorAll("[data-avatar]").forEach((el) => {
+      el.textContent = user.displayName.slice(0, 1).toUpperCase();
+    });
+    document.querySelectorAll("[data-logout]").forEach((el) => {
       el.addEventListener("click", () => {
-        location.href = "landing.html?profiles=1";
-      }),
-    );
+        TempoAuth.logout();
+        location.replace("login.html");
+      });
+    });
+    document.body.classList.remove("checking-profile");
     document.querySelectorAll("[data-theme-toggle]").forEach((el) => {
       const label = () => {
-        el.textContent =
-          document.documentElement.dataset.theme === "dark" ? "☀" : "☾";
+        el.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "☾";
         el.setAttribute("aria-label", "Switch color theme");
       };
       el.addEventListener("click", () => TempoTheme.toggle());
@@ -182,21 +77,48 @@
       label();
     });
   }
+  window.addEventListener("pageshow", () => {
+    if (document.body.dataset.profileRequired === "true" && !TempoAuth.currentAccount())
+      TempoAuth.requirePlayer();
+  });
+  const ready = Promise.resolve().then(() => {
+    user = TempoAuth.currentAccount();
+    if (document.body.dataset.profileRequired === "true") boot();
+    return user;
+  });
   globalThis.TempoProfile = {
     ready,
-    profiles,
-    create,
-    activate,
+    profiles: profileList,
     progress,
     update,
-    rename,
-    remove,
-    newId,
-    get user() {
+    newId: () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`,
+    get user() { return user; },
+    get storageAvailable() { return storageAvailable && TempoAuth.storageAvailable; },
+    rename(displayName) {
+      if (!user) throw Error("Sign in before changing your display name.");
+      displayName = String(displayName).trim();
+      if (!displayName || displayName.length > 80) throw Error("Display name must be 1–80 characters.");
+      const accounts = TempoAuth.accountList();
+      const updated = { ...user, displayName };
+      if (!write("tempo-accounts-v1", accounts.map((account) => account.id === user.id ? updated : account)))
+        throw Error("Could not save the display name. Check browser storage.");
+      user = updated;
+      document.querySelectorAll("[data-display-name], [data-username]").forEach((el) => el.textContent = displayName);
+      document.querySelectorAll("[data-avatar]").forEach((el) => el.textContent = displayName.slice(0, 1).toUpperCase());
       return user;
     },
-    get storageAvailable() {
-      return storageAvailable;
+    remove() {
+      if (!user) throw Error("Sign in before deleting your account.");
+      const accounts = TempoAuth.accountList();
+      if (!write("tempo-accounts-v1", accounts.filter((account) => account.id !== user.id)))
+        throw Error("Could not delete the account. Check browser storage and try again.");
+      try {
+        localStorage.removeItem("tempo-local-progress:" + user.id);
+      } catch {
+        throw Error("The account was updated, but its progress could not be removed.");
+      }
+      TempoAuth.logout();
+      user = null;
     },
     solved(id, assisted) {
       return update((p) => ({
@@ -207,23 +129,13 @@
         lastPlayed: Date.now(),
       }));
     },
-    rememberPuzzle(id) {
-      update((p) => ({ ...p, lastPuzzle: id }));
-    },
+    rememberPuzzle(id) { update((p) => ({ ...p, lastPuzzle: id })); },
     recordGame(id, result) {
-      update((p) => ({
+      return update((p) => ({
         ...p,
-        completedCount:
-          (p.completedCount ?? (p.games || []).length) +
-          ((p.games || []).some((g) => g.id === id) ? 0 : 1),
-        games: [
-          { id, ...result, date: Date.now() },
-          ...(p.games || []).filter((g) => g.id !== id),
-        ].slice(0, 50),
+        completedCount: (p.completedCount ?? (p.games || []).length) + ((p.games || []).some((g) => g.id === id) ? 0 : 1),
+        games: [{ id, ...result, date: Date.now() }, ...(p.games || []).filter((g) => g.id !== id)].slice(0, 50),
       }));
     },
   };
-  if (document.readyState === "loading")
-    document.addEventListener("DOMContentLoaded", boot, { once: true });
-  else boot();
 })();
