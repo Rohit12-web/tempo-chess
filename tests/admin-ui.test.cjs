@@ -1,0 +1,33 @@
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const root=path.resolve(__dirname,'..');
+test('Admin catalogue, navigation and password settings',async()=>{
+ class Element {constructor(){this.value='';this.children=[];this.listeners={};this.dataset={};this.disabled=false;this.open=false;} addEventListener(t,f){this.listeners[t]=f;} append(...x){this.children.push(...x);} replaceChildren(){this.children=[];} setAttribute(){} reset(){this.resetCalled=true;} focus(){this.focused=true;} scrollIntoView(){} querySelector(){return this.button ||=new Element();}}
+ const elements=new Map(),get=id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);};
+ let fail=false;
+ const context={console,document:{getElementById:get,createElement:()=>new Element(),body:{classList:{remove(){}}}},window:{addEventListener(){},confirm:()=>true},location:{replace(){}},TempoAuth:{requireAdmin:()=>true},TempoAdminAuth:{account:()=>({displayName:'Rohit'}),changePassword:async()=>{if(fail)throw Error('Wrong password');}},TempoCustomPuzzles:{list:()=>[{id:'custom-1',theme:'My puzzle',category:'Mate',difficulty:'Beginner',line:['e1e8'],published:false}]},TempoStudyBoard:class{render(){} flip(){}},TempoChess:{Game:class{},square:x=>x},TempoGameData:{position:()=>({move(){},status:()=>({over:false}),state:{turn:'w'},history:[]})}};
+ context.window=context.globalThis=context;context.addEventListener=()=>{};
+ vm.createContext(context);
+ vm.runInContext(fs.readFileSync(path.join(root,'js/data/puzzle-data.js'),'utf8'),context);
+ vm.runInContext(fs.readFileSync(path.join(root,'js/admin.js'),'utf8'),context);
+ assert.equal(get('admin-list').children.length,31);
+ assert.match(get('admin-count').textContent,/30 built-in · 1 custom · 31 shown/);
+ const first=get('admin-list').children[0];
+ assert.deepEqual(first.children[1].children.map(x=>x.textContent),['Preview']);
+ first.children[1].children[0].listeners.click();
+ assert.match(get('admin-status').textContent,/Read-only/);
+ get('admin-filter-source').value='custom';get('admin-filter-source').listeners.change();
+ assert.equal(get('admin-list').children.length,1);
+ assert.deepEqual(get('admin-list').children[0].children[1].children.map(x=>x.textContent),['Edit','Publish','Delete']);
+ get('admin-filter-source').value='builtin';get('admin-search').value='no-match-xyz';get('admin-search').listeners.input();
+ assert.match(get('admin-list').children[0].textContent,/No puzzles match/);
+ const form=get('admin-password-form'),panel=get('admin-password-section');panel.open=true;
+ get('admin-new-password').value=get('admin-confirm-password').value='new-password';
+ await form.listeners.submit({preventDefault(){},currentTarget:form});
+ assert.equal(panel.open,false);assert.ok(form.resetCalled);assert.ok(get('password-title').focused);
+ panel.open=true;fail=true;await form.listeners.submit({preventDefault(){},currentTarget:form});
+ assert.equal(panel.open,true);assert.match(get('admin-status').textContent,/Wrong password/);assert.equal(form.button.disabled,false);
+ const html=fs.readFileSync(path.join(root,'admin.html'),'utf8');
+ assert.doesNotMatch(html,/href="(?:index\.html|play\.html)/);
+ assert.match(html,/<details id="admin-password-section"[^>]*>/);
+ assert.doesNotMatch(html,/<details id="admin-password-section"[^>]*\sopen(?:\s|>)/);
+});

@@ -25,22 +25,22 @@
   <div class="admin-wrap">
     <header class="admin-header">
       <a href="landing.html" class="brand" aria-label="TempoChess home"><span class="brand-mark" aria-hidden="true">♜</span>tempo<span class="brand-period">.</span></a>
-      <nav aria-label="Manager navigation"><a href="index.html">Player dashboard</a><a href="play.html?view=puzzles">Play puzzles</a><button id="admin-theme" class="pill secondary" type="button">Change theme</button></nav>
+      <nav aria-label="Manager navigation"><a href="#collection-title">Puzzle collection</a><button id="admin-theme" class="pill secondary" type="button">Change theme</button></nav>
     </header>
     <main>
       <div class="admin-heading"><div><p class="eyebrow">A COLLECTION OF YOUR OWN</p><h1>Puzzle manager.</h1><p>Welcome, <span id="admin-identity">Rohit</span>. Create a position, explain the idea and give someone their next good move.</p></div><button id="admin-logout" class="pill secondary" type="button">Sign out</button></div>
       <p class="admin-local-note">Local admin: published puzzles are shared by profiles in this browser. They do not sync to other devices or website visitors. This password is a local access lock.</p>
       <p id="admin-status" role="status" aria-live="polite"></p>
       <noscript><p>Enable JavaScript to use the puzzle manager.</p></noscript>
-      <section id="admin-password-section" class="admin-card admin-access" aria-labelledby="password-title">
-        <h2 id="password-title">Change administrator password</h2><p>Changing it replaces the local salted hash. It does not affect puzzles or player progress.</p>
+      <details id="admin-password-section" class="admin-card admin-access" aria-labelledby="password-title">
+        <summary id="password-title">Change administrator password</summary><p>Changing it replaces the local salted hash. It does not affect puzzles or player progress.</p>
         <form id="admin-password-form">
           <label for="admin-current-password">Current password</label><input class="study-input" id="admin-current-password" type="password" required autocomplete="current-password">
           <label for="admin-new-password">New password</label><input class="study-input" id="admin-new-password" type="password" required minlength="8" maxlength="128" autocomplete="new-password">
           <label for="admin-confirm-password">Confirm new password</label><input class="study-input" id="admin-confirm-password" type="password" required minlength="8" maxlength="128" autocomplete="new-password">
           <button class="pill secondary" type="submit">Save password</button>
         </form>
-      </section>
+      </details>
       <div id="admin-workspace" hidden>
         <div class="admin-grid">
           <section class="admin-card" aria-labelledby="editor-title">
@@ -64,12 +64,12 @@
             <h2 id="preview-title">Position preview</h2><p id="admin-preview-status" role="status">Load an example or validate your puzzle.</p>
             <div id="admin-board"></div>
             <div class="admin-actions"><button id="admin-prev" class="pill secondary" type="button" disabled>Previous</button><button id="admin-next" class="pill secondary" type="button" disabled>Next move</button><button id="admin-flip" class="pill secondary" type="button">Flip board</button></div>
-            <p id="admin-moves" class="admin-help"></p><a id="admin-play" class="pill primary" hidden>Play published puzzle ↗</a>
+            <p id="admin-moves" class="admin-help"></p>
           </section>
         </div>
         <section class="admin-card admin-collection" aria-labelledby="collection-title">
-          <div class="admin-section-heading"><div><h2 id="collection-title">Your custom puzzles</h2><p id="admin-count"></p></div><button id="admin-refresh" class="pill secondary" type="button">Refresh list</button></div>
-          <div class="admin-filters"><div><label for="admin-search">Search</label><input id="admin-search" class="study-input" type="search" placeholder="Title, theme or instructions"></div><div><label for="admin-filter-level">Difficulty</label><select id="admin-filter-level" class="study-input"><option value="">All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div><div><label for="admin-filter-state">Visibility</label><select id="admin-filter-state" class="study-input"><option value="">All</option><option value="published">Published</option><option value="draft">Draft</option></select></div></div>
+          <div class="admin-section-heading"><div><h2 id="collection-title">Puzzle collection</h2><p id="admin-count"></p></div><button id="admin-refresh" class="pill secondary" type="button">Refresh list</button></div>
+          <div class="admin-filters"><div><label for="admin-filter-source">Source</label><select id="admin-filter-source" class="study-input"><option value="">All puzzles</option><option value="builtin">Built-in</option><option value="custom">Custom</option></select></div><div><label for="admin-search">Search</label><input id="admin-search" class="study-input" type="search" placeholder="Title, theme or instructions"></div><div><label for="admin-filter-level">Difficulty</label><select id="admin-filter-level" class="study-input"><option value="">All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div><div><label for="admin-filter-state">Visibility</label><select id="admin-filter-state" class="study-input"><option value="">All</option><option value="published">Published</option><option value="draft">Draft</option></select></div></div>
           <div id="admin-list" class="admin-list"></div>
           <p class="admin-help">Up to 200 custom puzzles. The 30 built-in puzzles are preserved and cannot be changed here.</p>
         </section>
@@ -79,3 +79,4 @@
   </div>
 </body>
 </html>
+
