@@ -716,10 +716,14 @@ video {
   gap: 15px;
 }
 .topbar-name {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
   font-weight: 550;
   max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .dashboard {
   max-width: 1140px;
@@ -1541,4 +1545,19 @@ h1,
   .select-option {
     transition: none;
   }
+}
+
+/* Align the username and icons in the Play/Puzzles header. */
+.game-page .header-actions {
+  align-items: center;
+}
+
+.game-page .header-actions .topbar-name {
+  min-width: 0;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.game-page .header-actions .icon-button {
+  flex-shrink: 0;
 }
